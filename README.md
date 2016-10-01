@@ -1,2 +1,2 @@
 # Competitions
-Competition repository
+Repository of various competitions I participate
