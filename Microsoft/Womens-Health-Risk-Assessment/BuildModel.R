@@ -6,8 +6,7 @@ library(readr)
 library(dplyr)
 
 doBuildCV <- F
-#dataURL <- 'http://az754797.vo.msecnd.net/competition/whra/data/WomenHealth_Training.csv'
-dataURL <- "WomenHealth_Training.csv"
+dataURL <- 'http://az754797.vo.msecnd.net/competition/whra/data/WomenHealth_Training.csv'
 seedForCV <- 1000
 
 # Read data to R workspace. The string field religion is read as factors
@@ -15,7 +14,6 @@ colclasses <- rep("integer",50)
 colclasses[36] <- "character"
 dataset1 <- read.table(dataURL, header=TRUE, sep=",", strip.white=TRUE, stringsAsFactors = F, colClasses = colclasses)
 #summary(dataset1)
-#dataset1$religion[dataset1$religion == ""] <- NA
 encode_religion <- function(dat) {
   #Input: Character Vector for religion
   #Output: Numeric Vector
@@ -48,17 +46,10 @@ manual_encode_religion <- function(dat) {
 }
 
 featureEngineering <- function(dat) {
-  #dat$feat_countOfNa <- apply(dat, 1, function(x) sum(x == ""))
-  #dat <- group_by(dat, geo) %>% mutate(feat_seq = 1:length(geo)) 
-  #dat$feat_sum_Religion <- apply(dat[, c("christian", "muslim", "hindu", "other")], 1, sum)
-  #dat$feat_sum_things <- apply(dat[, c("cellphone", "motorcycle", "radio", "cooker", "fridge", "furniture", "computer", "cart", "thrasher", "car", "generator", "irrigation")], 1, sum)
   dat$patientID <- NULL
   dat$INTNR <- NULL
-  #dat$urban <- NULL
-  #dat[dat == 99] <- -1
   dat <- manual_encode_religion(dat)
   dat$combine <- paste(dat$segment, dat$subgroup, sep = "")
-  #dat$combine <- paste(dat$geo, dat$segment, dat$subgroup, sep = "")
   dat$segment <- NULL
   dat$subgroup <- NULL
   dat[is.na(dat)] <- -1
@@ -71,11 +62,6 @@ featureEngineering <- function(dat) {
   return(dat)
 }
 dataset1 <- featureEngineering(dataset1)
-
-#set.seed(2000)
-#inTrain <- createDataPartition(y = paste(dataset1$combine, dataset1$geo), p = 0.7, list = FALSE)
-#inTrain <- createDataPartition(y = paste(dataset1$segment, dataset1$subgroup, dataset1$geo), p = 0.7, list = FALSE)
-#val <- dataset1[-inTrain, ]
 
 #XGB Model
 run_XGB <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = T, Importance = F) {
@@ -98,8 +84,6 @@ run_XGB <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = 
   levels(dat[[TARGET]]) <- c(0:(length(levels(dat[[TARGET]])) - 1))
   X_train <- dat[, names(dat) != TARGET]
   Y_train <- dat[[TARGET]]
-  #Y_train <- dat[, names(dat) == TARGET]
-  #rm(dat)
   gc()
   features <- names(X_train)
   
@@ -142,7 +126,6 @@ run_XGB <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = 
                           label = data.matrix(Y_valSet),
                           missing = NA)
     watchlist <- list(val = dval, train = dtrain)
-    #rm(X_trainSet, X_valSet)
     gc()
     #nrounds <- 100000
     
@@ -156,11 +139,7 @@ run_XGB <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = 
     gc()
   }
   
-  #filenumber <- 1
-  #Importance <- F
-
-  #source("xgboost_tuning_min.R", local = T)
-  
+ 
   t <- Sys.time()
   j <- 1
   cat("Generating XGB", "\n")
@@ -212,18 +191,8 @@ COL_SAMPLE <- 0.8
 GAMMA <- 0
 
 seed <- 1000
-#GEO <- 9
 sub <- data.frame()
 for (GEO in 1:9) {
-	if (GEO == 1) nrounds <- 3 
-	if (GEO == 2) nrounds <- 50
-	if (GEO == 3) nrounds <- 30
-	if (GEO == 4) nrounds <- 70
-	if (GEO == 5) nrounds <- 153
-	if (GEO == 6) nrounds <- 87
-	if (GEO == 7) nrounds <- 12
-	if (GEO == 8) nrounds <- 87
-	if (GEO == 9) nrounds <- 71
 	xgb <- run_XGB(dataset1, 
                        TARGET = "combine", 
                        GEO = GEO,    
@@ -245,102 +214,6 @@ final$NEW <- apply(final[, -1], 1, function(x) {
 print("#################################################################")
 print(sum(final$NEW == final$O) / nrow(final))
 xgb <- final
-#stop("Stopping")
-
-
-###################
-run_GBM <- function(dat, TARGET, GEO,DropList, seed = 1000, nrounds, BuildCV = T, Importance = F) {
-  #Input: dat = data.frame
-  #Input: TARGET Variable
-  #Input: DropList = Columns to Drop
-  #Input: nround = # of rounds
-  #Input: BuildCV = Logical (Whether to perform CV)
-  #for (i in DropList) {
-  #  dat[[i]] <- NULL
-  #}
-  cat("GEO = ", GEO, "\n")
-  dat <- dat[dat$geo == GEO, ]
-  set.seed(seedForCV)
-  #inTrain <- createDataPartition(y = paste(dat[[TARGET]]), p = 0.7, list = FALSE)
-  inTrain <- createDataPartition(y = paste(dat[[TARGET]], dat$geo), p = 0.7, list = FALSE)
-
-  dat[[TARGET]] <- as.factor(dat[[TARGET]])
-  levels(dat[[TARGET]]) <- c(0:(length(levels(dat[[TARGET]])) - 1))
-  classes <- levels(dat[[TARGET]])
-  features <- names(dat)
-  
-  
-  if (BuildCV) {
-    valSet <- dat[-inTrain, ] 
-    train <- dat[inTrain, ]
-    
-    rm(dat)
-    gc()
-    #nrounds <- 100000
-    
-  } else {
-    train <- dat
-  }
-  
-  #filenumber <- 1
-  #Importance <- F
-  
-  #source("xgboost_tuning_min.R", local = T)
-  
-  t <- Sys.time()
-  j <- 1
-  cat("Generating GBM", "\n")
-  
-  #fitControl <- trainControl(method = "repeatedcv", number = 4, repeats = 4)
-  set.seed(seed)
-  gbmFit1 <- gbm(combine ~ ., 
-                   	data = train, 
-			distribution = "multinomial",
-			n.trees = 500,
-			interaction.depth = 1,
-			n.minobsinnode = 1,
-			shrinkage = 0.01,
-			bag.fraction = 0.9,
-			train.fraction = 1.0)
-                   #method = "gbm", 
-                   #trControl = fitControl,
-                   #verbose = FALSE)
-  print(format(Sys.time() - t, format = "%H:%M") )
-  if (BuildCV) {
-    val_target_gbm <- predict(gbmFit1, valSet, n.trees = 500, type= "response")
-    probs <- as.data.frame(matrix(val_target_gbm, nrow=nrow(valSet), byrow = TRUE))
-    colnames(probs) <- classes
-    #val_target_gbm <- predict(gbmFit1, valSet, type= "raw")
-    return(cbind(O = valSet$combine, probs))
-  } else {
-    modelfile <- paste("gbm_", TARGET, "_seed", seed, ".model", sep = "")
-    print("Saving Model")
-    saveRDS(gbmFit1, modelfile )
-  }
-  if (Importance) {
-    print("Generating Importance File")
-    imp <- xgb.importance(features, model = bst)
-    importancefile <- paste("xgb_importance", TARGET, "csv", sep=".")
-    write_csv(imp, importancefile)
-  }
-  
-  
-}
-
-#GEO <- 1
-#gbm <- run_GBM(dataset1, 
-#               TARGET = "combine", 
-#		GEO = GEO,
-#               DropList = NULL, 
-#               seed = 1000,
-#               BuildCV = doBuildCV, 
-#               Importance = F)
-
-#final <- gbm
-#final$NEW <- max.col(final[-1])-1
-#final$ORIGINAL <- xgb$O
-#head(final)
-#sum(final$NEW == final$O) / nrow(final)
 
 
 ####################
@@ -370,14 +243,8 @@ run_RF <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = T
   } else {
     train <- dat
   }
-  
-  #filenumber <- 1
-  #Importance <- F
-  
-  #source("xgboost_tuning_min.R", local = T)
-  
-  #j <- 1
-  for (s in seed) {
+
+	for (s in seed) {
   	t <- Sys.time()
   	cat("Generating RF", "\n")
 	set.seed(s)
@@ -420,7 +287,6 @@ run_RF <- function(dat, TARGET, GEO, DropList, seed = 1000, nrounds, BuildCV = T
   
   
 }
-#GEO <- 9
 mtry <- 32 
 ntree <- 400
 seed <- c(1000)
@@ -448,6 +314,7 @@ print(s)
 rf <- final
 
 ####################
+#Build a weighted score
 w_xgb <- 0.4
 w_rf <- 0.6
 #w_gbm <- 1/3
