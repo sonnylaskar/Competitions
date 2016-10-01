@@ -1,8 +1,7 @@
-#install.packages("src/downloaded_packages/chron_2.3-47.zip", lib = ".", repos = NULL, verbose = TRUE)
+#Create a zip file with all packages which are not available in Microsoft Azure environment and upload the zip.
+#The zip file is available in "src" folder. My zip was named downloaded_packages.zip
 install.packages("src/downloaded_packages/stringi_1.1.1.zip", lib = ".", repos = NULL, verbose = TRUE)
-#install.packages("src/downloaded_packages/data.table_1.9.6.zip", lib = ".", repos = NULL, verbose = TRUE)
 install.packages("src/downloaded_packages/magrittr_1.5.zip", lib = ".", repos = NULL, verbose = TRUE)
-#install.packages("src/downloaded_packages/stringr_1.0.0.zip", lib = ".", repos = NULL, verbose = TRUE)
 install.packages("src/downloaded_packages/xgboost_0.4-4.zip", lib = ".", repos = NULL, verbose = TRUE)
 
 library(xgboost, lib.loc=".", verbose=TRUE)
@@ -10,10 +9,7 @@ library(dplyr)
 library(gbm)
 library(randomForest)
 # Map 1-based optional input ports to variables
-#dataset1 <- maml.mapInputPort(1) # class: data.frame
-dataset1 <- read.csv("WomenHealth_Test.csv", header = T)
-dataset1 <- read.csv("WomenHealth_Training.csv", header = T)
-#dataset1 <- dataset1[1, ]
+dataset1 <- maml.mapInputPort(1) # class: data.frame
 dataset1$segment <- NULL
 dataset1$subgroup <- NULL
 cat("Original dim: ", dim(dataset1), "\n")
@@ -54,7 +50,6 @@ featureEngineering <- function(dat) {
   dat$INTNR <- NULL
   dat$geo <- as.integer(dat$geo)
   dat <- manual_encode_religion(dat)
-  #dat$combine <- paste(dat$segment, dat$subgroup, sep = "")
   dat$segment <- NULL
   dat$subgroup <- NULL
   dat[is.na(dat)] <- -1
