@@ -107,7 +107,7 @@ featureEngg <- function(dat) {
   dat$feat_daysBetweenFirstInteraction_and_registration <- as.numeric(difftime(dat$Registration_Date , dat$First_Interaction, units = "days"))
   dat$feat_daysBetweenFirstInteraction_and_EventStart <- as.numeric(difftime(dat$Camp_Start_Date , dat$First_Interaction, units = "days"))
 
-  #Feature of Football in  each event
+  #Feature of Registration for each event
   dat %>%
     group_by(Health_Camp_ID) %>%
     summarise(feat_CountOfEventsFootfall = n()) -> df_temp
