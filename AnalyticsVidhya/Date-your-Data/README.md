@@ -1,6 +1,8 @@
 # AnalyticsVidhya Date Your Data Contest
 This repository contains the code used by me in the "Date Your Data Contest". This scored 0.7006 on the Private Leaderboard and secured 3rd position in the contest
 
+https://www.analyticsvidhya.com/blog/2016/03/winning-solutions-dyd-competition-xgboost-ruled/
+
 A) Prerequisites
 
 Ensure that the following packages are installed:
