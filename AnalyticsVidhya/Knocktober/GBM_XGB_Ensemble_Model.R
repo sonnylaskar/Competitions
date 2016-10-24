@@ -140,7 +140,7 @@ featureEngg <- function(dat) {
   }
 
   
-  #Drop any columns with no variatioon
+  #Drop any columns with no variation
   for (i in names(dat)) {
     if (length(unique(dat[[i]])) <= 1) {
       cat("Dropping no variation column - ", i, "\n")
