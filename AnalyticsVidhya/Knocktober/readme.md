@@ -8,7 +8,7 @@ Binary Classification
 
 2 Bags of XGBoost
 
-2 Bags of 
+2 Bags of GBM
 
 Equal Weighted Rank Averge of the above models.
 
