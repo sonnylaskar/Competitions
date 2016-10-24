@@ -1,4 +1,8 @@
-# kaggle-avito-final
+# Kaggle Avito Duplicate Ad Detection Contest 
+Winning Solution Blog : https://blog.kaggle.com/2016/08/31/avito-duplicate-ads-detection-winners-interview-2nd-place-team-the-quants-mikel-peter-marios-sonny/
+
+Contest Link: https://www.kaggle.com/c/avito-duplicate-ads-detection/
+
 Final solution of Avito Duplicate Ad Detection - TheQuants
 
 ##Prerequisites:
