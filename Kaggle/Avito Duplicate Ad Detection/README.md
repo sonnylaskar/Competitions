@@ -3,6 +3,8 @@ Winning Solution Blog : https://blog.kaggle.com/2016/08/31/avito-duplicate-ads-d
 
 Contest Link: https://www.kaggle.com/c/avito-duplicate-ads-detection/
 
+Private Leaderboard Score - _0.95294_ ( Rank 2 / 548)
+
 Final solution of Avito Duplicate Ad Detection - TheQuants
 
 ##Prerequisites:
