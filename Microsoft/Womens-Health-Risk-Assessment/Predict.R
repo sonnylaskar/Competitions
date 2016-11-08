@@ -1,3 +1,4 @@
+#(c) Sonny Laskar (sonnylaskar at gmail Dot Com)
 #Create a zip file with all packages which are not available in Microsoft Azure environment and upload the zip.
 #The zip file is available in "src" folder. My zip was named downloaded_packages.zip
 install.packages("src/downloaded_packages/stringi_1.1.1.zip", lib = ".", repos = NULL, verbose = TRUE)
