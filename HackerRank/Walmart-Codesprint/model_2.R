@@ -1,4 +1,4 @@
-# text2vec package
+# Sonny Laskar (c)
 library(readr)
 library(text2vec)
 library(dplyr)
@@ -129,39 +129,7 @@ for (i in SHELVES) {
   cat("Add Tag Field ", i, "\n")  
   colName <- paste("Tag", i, sep = "_") 
   i <- paste("\\b", i, "\\b", sep = "") #Grepl needs those blocks for exact match
-  #train[[colName]] <- as.numeric(train$tag %in% i)
   train[[colName]] <- as.numeric(grepl(i, train$tag))
-}
-
-#sapply(grep("Tag", names(train), value = T), function(x) {table(train[[x]])} )
-
-
-F1.xgb = function (preds, dtrain, cutoff = 0.5) {
-  obs <- xgboost::getinfo(dtrain, "label")
-  preds <- ifelse(preds >= cutoff, 1, 0)
-  
-  precision <- sum(preds & obs) / sum(preds)
-  recall <- sum(preds & obs) / sum(obs)
-  F1 <- 2 * precision * recall / (precision + recall)
-  return(list(metric = "F1", value = F1))
-}
-
-Accuracy.xgb = function (preds, dtrain, cutoff = 0.5) {
-  obs <- xgboost::getinfo(dtrain, "label")
-  preds <- ifelse(preds >= cutoff, 1, 0)
-  
-  cm = as.matrix(table(Actual = obs, Predicted = preds))
-  n = sum(cm) # number of instances
-  #nc = nrow(cm) # number of classes
-  diag = diag(cm) # number of correctly classified instances per class
-  #rowsums = apply(cm, 1, sum) # number of instances per class
-  #colsums = apply(cm, 2, sum) # number of predictions per class
-  #p = rowsums / n # distribution of instances over the actual classes
-  #q = colsums / n # distribution of instances over the predicted classes
-  
-  accuracy = sum(diag) / n
-  return(list(metric = "accuracy", value = accuracy))
-  
 }
 
 run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, Importance = F) {
@@ -176,13 +144,10 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
   
   
   set.seed(seedForCV)
-  #inTrain <- createDataPartition(y = Y_train, p = 0.7, list = FALSE)
   folds <- createFolds(Y_train, 3)  
-  #n <- which(X_train$Camp_Start_Date >= "2005-09-20")
   
   Y_train <- as.factor(Y_train)
   classes <- levels(Y_train)
-  #levels(Y_train) <- c(0:(length(levels(Y_train)) - 1))
   gc()
   
   for (i in DropList) {
@@ -190,7 +155,6 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
     X_train[[i]] <- NULL
   }
   features <- names(X_train)
-  #X_train[is.na(X_train)] <- -1
   
   EVAL_METRIC <- "auc"
   OBJECTIVE <- "binary:logistic"
@@ -203,14 +167,12 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
     objective           = OBJECTIVE,
     booster             = BOOSTER,
     eval_metric         = EVAL_METRIC,
-    #feval               = F1.xgb,
     eta                 = ETA,
     max_depth           = MAX_DEPTH,
     subsample           = SUB_SAMPLE,
     min_child_weight    = MIN_CHILD_WEIGHT,
     colsample_bytree    = COL_SAMPLE,
     gamma               = GAMMA,
-    #num_class           = length(levels(Y_train)),
     nthread             = nthread,
     num_parallel_tree   = 1
   )
@@ -222,11 +184,6 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
     X_valSet <- X_train[folds[[fold]], ] #Replace ! with - if using index
     Y_valSet <- Y_train[folds[[fold]]]
     
-    #X_trainSet <- X_train
-    #Y_trainSet <- Y_train
-    #X_valSet <- X_train #Replace ! with - if using index
-    #Y_valSet <- Y_train
-    
     rm(X_train)
     gc()
     print("Generating xgb.DMatrix")
@@ -237,10 +194,8 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
                           label = data.matrix(Y_valSet),
                           missing = NA)
     watchlist <- list(val = dval, train = dtrain)
-    #rm(X_trainSet, X_valSet)
     gc()
     nrounds <- 100000
-    
   } else {
     print("Generating xgb.DMatrix")
     dtrain <- xgb.DMatrix(  data = data.matrix(X_train),
@@ -251,12 +206,7 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
     gc()
   }
   
-  #filenumber <- 1
-  #Importance <- F
-  
-  #source("xgboost_tuning_min.R", local = T)
-  #source("xgboost_tuning_max.R", local = T)
-  
+ 
   t <- Sys.time()
   j <- 1
   cat("Generating XGB", "\n")
@@ -277,13 +227,8 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
   if (BuildCV) {
     print(bst$bestScore)
     print(bst$bestInd)
-    #val_target <- getinfo(dval, 'label')
     val_target_xgb <- predict(bst, dval, missing=NA)
     probs <- as.data.frame(matrix(val_target_xgb, nrow=nrow(X_valSet), byrow = TRUE))
-    #colnames(probs) <- classes
-    #levels(Y_valSet) <- classes
-    
-    
   } else {
     modelfile <- paste("xgb_seed", seed, TARGET, ".model", sep = "_")
     print(modelfile)
@@ -297,117 +242,8 @@ run_XGB <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, 
     write_csv(imp, importancefile)
   }
   
-  #return(cbind(O = Y_valSet, probs))
 }
 
-
-run_GBM <- function(train, TARGET, DropList, seed = 1000, nrounds, BuildCV = T, Importance = F) {
-  #Input: dat = data.frame
-  #Input: TARGET Variable
-  #Input: DropList = Columns to Drop
-  #Input: nround = # of rounds
-  #Input: BuildCV = Logical (Whether to perform CV)
-  X_train <- train #[, names(train) != TARGET]
-  Y_train <- train[[TARGET]]
-  
-  
-  set.seed(seedForCV)
-  #inTrain <- createDataPartition(y = Y_train, p = 0.7, list = FALSE)
-  folds <- createFolds(Y_train, 3)  
-  #n <- which(X_train$Camp_Start_Date >= "2005-09-20")
-  
-  #Y_train <- as.factor(Y_train)
-  #classes <- levels(Y_train)
-  #levels(Y_train) <- c(0:(length(levels(Y_train)) - 1))
-  gc()
-  
-  
-  #Y_train <- as.factor(Y_train)
-  #classes <- levels(Y_train)
-  #classes <- levels(Y_train)
-  #levels(Y_train) <- c(0:(length(levels(Y_train)) - 1))
-  
-  for (i in DropList) {
-    cat("Dropping", i, "\n")
-    X_train[[i]] <- NULL
-  }
-  
-  X_train[is.na(X_train)] <- -1
-  features <- names(X_train)
-  
-  
-  if (BuildCV) {
-    X_trainSet <- X_train[-folds[[fold]], ]
-    Y_trainSet <- Y_train[-folds[[fold]]]
-    X_valSet <- X_train[folds[[fold]], ] #Replace ! with - if using index
-    Y_valSet <- Y_train[folds[[fold]]]
-    
-    #valSet <- dat[-inTrain, ]
-    #train <- dat[inTrain, ]
-  } else {
-    X_trainSet <- X_train
-    Y_trainSet <- Y_train
-  }
-  
-  #filenumber <- 1
-  #Importance <- F
-  
-  #source("xgboost_tuning_min.R", local = T)
-  
-  #j <- 1
-  for (s in seed) {
-    t <- Sys.time()
-    cat("Generating GBM", "\n")
-    set.seed(s)
-    model.gbm <- gbm.fit(x = X_trainSet, 
-                   y = Y_trainSet,
-                   distribution = "bernoulli",
-                   n.trees = ntree,
-                   interaction.depth = 3,
-                   n.minobsinnode = 10,
-                   bag.fraction = 0.8,
-                   shrinkage = 0.1)
-    assign(paste("model.gbm", s, sep = ".") , model.gbm)
-    print(format(Sys.time() - t, format = "%H:%M") )
-  }
-  
-  if (BuildCV) {
-    val_target_gbm <- data.frame()
-    for (s in seed) {
-      #val_target_gbm <- predict(bst, test, n.trees = ntree, type = "response")
-      val_target_gbm_temp = as.data.frame(predict(get(paste("model.gbm", s, sep = ".")),
-                                                  X_valSet,
-                                                  n.trees = ntree,
-                                                  type="response"))
-      names(val_target_gbm_temp) <- "P"
-      if (nrow(val_target_gbm) == 0 ) {
-        val_target_gbm <- val_target_gbm_temp
-      } else {
-        val_target_gbm  <- (val_target_gbm + val_target_gbm_temp)
-      }
-    }
-    val_target_gbm <- val_target_gbm / length(seed)
-    #colnames(val_target_gbm) <- classes
-    #levels(Y_valSet) <- classes
-  } else {
-    modelfile <- paste("gbm_seed", seed, TARGET, ".model", sep = "_")
-    print(modelfile)
-    print("Saving Model")
-    saveRDS(model.gbm, modelfile )
-    return(NULL)
-  }
-  if (Importance) {
-    print("Generating Importance File")
-    imp <- xgb.importance(features, model = bst)
-    importancefile <- paste("xgb_importance", TARGET, "csv", sep=".")
-    write_csv(imp, importancefile)
-  }
-  return(cbind(O = Y_valSet, val_target_gbm))
-  
-}
-
-
-#train <- train[, c(impF, TARGET, "Camp_Start_Date")]
 
 fold <- 3
 seedForCV <- 1000
@@ -454,8 +290,6 @@ predict_XGB <- function(test, DropList, TARGET, seed) {
   print(modelfile)
   bst <- readRDS(modelfile )
   test_target_xgb <- predict(bst, data.matrix(test), missing=NA)
-  #final_test <- data.frame(item_id = id,
-  #                         TARGET = test_target_xgb)
 
   final_test <- data.frame(item_id = id) 
   final_test[[TARGET]] <- test_target_xgb
