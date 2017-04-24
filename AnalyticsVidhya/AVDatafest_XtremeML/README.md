@@ -26,13 +26,7 @@ Xgboost is the first model that I try everytime I have to solve any such problem
 ## Steps to reproduce the submission:
 1. Copy all Train files in the folder _"input/Train"_
 2. Copy all Test files in the folder _"input/Test"_
-3. External data
-
-I used holiday list of Spain as an external data since it is readily available anytime
-
-I manually created the list from this [url]("http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia" "Calender")
-
-The holiday list is saved in "input/holiday.csv"
+3. External data: I used holiday list of Spain as an external data from [here]("http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia" "Calender")
 4. Ensure folder _"output"_ exists
 5. Run the Rscript _final_model.R_ from the _code_ directory
 6. The final files will be created in the _"output"_ folder
