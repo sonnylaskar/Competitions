@@ -7,7 +7,6 @@ This model scored 60.9 on the Public Leaderboard, 61.7 on the [Private Leaderboa
 ## Prerequisites:
 1. R version 3.3.3 
 2. R Packages: readr, lubridate, dplyr, tidyr, xgboost
-3. Any Linux Distribution preferred (But should work on Mac/Windows as well)
 
 ## Problem Statement:
 The largest water supplier of Barcelona wants to leverage machine learning to effectively predict daywise-mediumwise-departmentwise breakdown of predictions of how many contacts (tickets/enquiries) would it receive and how many resolutions would it make so that they can size their team properly and improve customer satisfaction.
