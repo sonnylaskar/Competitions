@@ -1,6 +1,6 @@
-# Winning Solution for Analytics Vidhya Machine Learning Competition
+# Winning Solution for Analytics Vidhya Machine Learning Competition - Xtreme ML Hack
 https://datahack.analyticsvidhya.com/contest/machine-learning-hackathon/
-------
+
 
 (c) Sonny (https://github.com/sonnylaskar)
 
