@@ -25,16 +25,16 @@ While this looked to be a time-series problem, it did not work out for me to sol
 Xgboost is the first model that I try everytime I have to solve any such problem. As always, it gave a significant score. For cross validation, I used the last 4 months data. 
 
 ## Steps to reproduce the submission:
-1. Copy all Train files in the folder "input/Train"
-2. Copy all Test files in the folder "input/Test"
+1. Copy all Train files in the folder _"input/Train"_
+2. Copy all Test files in the folder _"input/Test"_
 3. External data:
 	I used holiday list of Spain as an external data since it is readily available anytime
 	I manually created the list from the this [url]("http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia" "Calender")
 	Note: By changing the year, we can get for each year from 2010 to 2017
 	The holiday list is saved in "input/holiday.csv"
-4. Ensure folder "output" exists
-5. Run the Rscript final_model.R from the code directory
-6. The final files will be created in the "output" folder
+4. Ensure folder _"output"_ exists
+5. Run the Rscript _final_model.R_ from the code directory
+6. The final files will be created in the _"output"_ folder
 
 Enjoy :-)
 
