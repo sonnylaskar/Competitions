@@ -1,8 +1,6 @@
-# Winning Solution for Analytics Vidhya Machine Learning Competition - Xtreme ML Hack
-https://datahack.analyticsvidhya.com/contest/machine-learning-hackathon/
+# Winning Solution for Analytics Vidhya Machine Learning Competition - [Xtreme ML Hack](https://datahack.analyticsvidhya.com/contest/machine-learning-hackathon/)
 
-
-(c) Sonny (https://github.com/sonnylaskar)
+(c) [Sonny](https://github.com/sonnylaskar)
 
 *Prerequisites:*
 1. R version 3.3.3 
@@ -14,10 +12,8 @@ https://datahack.analyticsvidhya.com/contest/machine-learning-hackathon/
 2. Copy all Test files in the folder "input/Test"
 3. External data:
 	I used holiday list of Spain as an external data since it is readily available anytime
-	I manually created the list from the below url
-	"http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia"
+	I manually created the list from the this [url]("http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia" "Calender")
 	Note: By changing the year, we can get for each year from 2010 to 2017
-
 	The holiday list is saved in "input/holiday.csv"
 4. Ensure folder "output" exists
 5. Execute the below command:
