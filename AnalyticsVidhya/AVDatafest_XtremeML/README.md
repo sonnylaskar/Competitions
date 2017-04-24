@@ -4,12 +4,12 @@
 
 This model scored 60.9 on the Public Leaderboard, 61.7 on the Private Leaderboard and ranked #2
 
-*Prerequisites:*
+## Prerequisites:
 1. R version 3.3.3 
 2. R Packages: readr, lubridate, dplyr, tidyr, xgboost
 3. Any Linux Distribution
 
-*Steps:*
+## Steps:
 1. Copy all Train files in the folder "input/Train"
 2. Copy all Test files in the folder "input/Test"
 3. External data:
@@ -26,4 +26,5 @@ Enjoy :-)
 
 
 Regards
+
 Sonny
