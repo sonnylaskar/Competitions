@@ -23,10 +23,17 @@ While this looked to be a time-series problem, it did not work out for me to sol
 ### Modeling:
 Xgboost is the first model that I try everytime I have to solve any such problem. As always, it gave a significant score. For cross validation, I used the last 4 months data. 
 
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
+
 ## Steps to reproduce the submission:
 1. Copy all Train files in the folder _"input/Train"_
 2. Copy all Test files in the folder _"input/Test"_
-3. External data:
+3. External data
 ⋅⋅* I used holiday list of Spain as an external data since it is readily available anytime
 ⋅⋅* I manually created the list from this [url]("http://www.officeholidays.com/countries/spain/regional.php?list_year=2010&list_region=catalonia" "Calender")
 ⋅⋅* The holiday list is saved in "input/holiday.csv"
