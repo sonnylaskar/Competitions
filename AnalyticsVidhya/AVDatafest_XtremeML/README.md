@@ -32,7 +32,7 @@ Xgboost is the first model that I try everytime I have to solve any such problem
 	Note: By changing the year, we can get for each year from 2010 to 2017
 	The holiday list is saved in "input/holiday.csv"
 4. Ensure folder _"output"_ exists
-5. Run the Rscript _final_model.R_ from the code directory
+5. Run the Rscript _final_model.R_ from the _code_ directory
 6. The final files will be created in the _"output"_ folder
 
 Enjoy :-)
