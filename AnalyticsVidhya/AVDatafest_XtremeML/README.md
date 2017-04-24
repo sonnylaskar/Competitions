@@ -2,6 +2,8 @@
 
 (c) [Sonny](https://github.com/sonnylaskar)
 
+This model scored 60.9 on the Public Leaderboard, 61.7 on the Private Leaderboard and ranked #2
+
 *Prerequisites:*
 1. R version 3.3.3 
 2. R Packages: readr, lubridate, dplyr, tidyr, xgboost
