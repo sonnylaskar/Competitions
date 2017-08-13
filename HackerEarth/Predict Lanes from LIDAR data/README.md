@@ -16,15 +16,11 @@ Copy all input files in input folder
 Copy all code files in code folder
 ```
 
-### Build Haversine Length of Each Line
-Execute *Rscript final_1_calculateHaversineDistance.R*
+### Scripts
+Execute *Rscript final_1_calculateHaversineDistance.R* to calculate the length of each line by finding the Haversine distance between the two extreme coordinates for each line<br/>
 
 Execute *Rscript final_2_buildData.R*
         <br/>This script builds all features and prepares the data for final model
-
-Execute *Rscript final_3_buildModel.R* to build the final model
-        <br/>XGBOOST models with 10 different seeds are built and averaged
-        <br/>The final submission file will be in output folder
 
 ### Feature Engineering:
 ```
