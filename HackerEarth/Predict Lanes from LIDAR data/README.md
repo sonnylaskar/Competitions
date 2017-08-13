@@ -1,4 +1,4 @@
-# Approach for [HackerEarth India Hacks Machine Learning Competition - Semi Finals](https://www.hackerearth.com/challenge/test/indiahacks-2017-machine-learning-round-2/) - (11-12 August 2017, Bangalore, India)
+# Approach for [HackerEarth India Hacks Machine Learning Competition - Semi Finals](https://www.hackerearth.com/challenge/test/indiahacks-2017-machine-learning-round-2/) - (12-13 August 2017, Bangalore, India)
 ## (c) [Sonny Laskar](https://github.com/sonnylaskar)
 ## Model scored #1 on Public Leaderboard and #2 on Private Leaderboard
 
