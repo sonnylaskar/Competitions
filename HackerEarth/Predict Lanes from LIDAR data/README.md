@@ -1,46 +1,33 @@
-# Approach 
-# Sonny Laskar https://github.com/sonnylaskar
+# Approach for HackerEarth India Hacks Machine Learning Competition - Semi Finals - (11-12 August 2017, Bangalore, India)
+## (c) [Sonny Laskar](https://github.com/sonnylaskar)
+## Model scored #1 on Public Leaderboard and #2 on Private Leaderboard
 
 ## Pre-requisites:
+```
 R 3.3+
 Packages: xgboost, tidyverse, feather, geosphere
-
+```
 ## Approach
 
 ### Directory
+```
 Create folders - code, input, output
 Copy all input files in input folder
 Copy all code files in code folder
+```
 
 ### Build Haversine Length of Each Line
-Execute Rscript final_1_calculateHaversineDistance.R
+Execute *Rscript final_1_calculateHaversineDistance.R*
 
-Execute Rscript final_2_buildData.R
-        This script builds all features and prepares the data for final model
+Execute *Rscript final_2_buildData.R*
+        <br/>This script builds all features and prepares the data for final model
 
-Execute final_3_buildModel.R to build the final model
-        XGBOOST models with 10 different seeds are built and averaged
-        The final submission file will be in output folder
-# Approach
+Execute *Rscript final_3_buildModel.R* to build the final model
+        <br/>XGBOOST models with 10 different seeds are built and averaged
+        <br/>The final submission file will be in output folder
 
-## Pre-requisites:
-R 3.3+
-Packages: xgboost, tidyverse, feather, geosphere, stringr
-
-## Approach
-
-### Directory
-Create folders - code, input, output
-Copy all input files in input folder
-Copy all code files in code folder
-
-### Build Haversine Length of Each Line
-Execute Rscript final_1_calculateHaversineDistance.R
-
-Execute Rscript final_2_buildData.R
-        This script builds all features and prepares the data for final model
-
-Feature Engineering:
+### Feature Engineering:
+```
   sumOfDistanceFromLeft = Sum of all distances towards Left
   sumOfDistanceFromRight = Sum of all distances towards Right
   r_sumOfDistanceFromLR  = Rati of the above two
@@ -52,7 +39,10 @@ Feature Engineering:
   totalLaneLinesMean = Mean of total Lane Lines
   haversineDistance = Haversine length of each line and averaged, Then it is scaled by dividing against the LaneLineMean value
   [Refer feature Importance plot for importance]
-
-Execute final_3_buildModel.R to build the final model
-        XGBOOST models with 10 different seeds are built and averaged
+```
+  Execute *final_3_buildModel.R* to build the final model<br/>
+        XGBOOST models with 10 different seeds are built and averaged.
         The final submission file will be in output folder
+
+<br/>
+Cheers :-)
