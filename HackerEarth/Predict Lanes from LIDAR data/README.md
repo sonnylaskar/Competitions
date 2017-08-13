@@ -26,7 +26,7 @@ Execute *Rscript final_2_buildData.R*
 ```
   sumOfDistanceFromLeft = Sum of all distances towards Left
   sumOfDistanceFromRight = Sum of all distances towards Right
-  r_sumOfDistanceFromLR  = Rati of the above two
+  r_sumOfDistanceFromLR  = Ratio of the above two
   int_distLR = Intersection between the distances in left and right
   latCounter = Unique Count of latitude after rounding off to 4 digits
   lonCounter = Unique Count of longitude after rounding off to 4 digits
